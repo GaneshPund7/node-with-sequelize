@@ -5,19 +5,39 @@ const profile = require('./src/profile/profile.route');
 // const Profile = require('./src/modal/profile.modal')
 const app = express();
 const PORT = 3000;
+const cpus = os.cpus().length;
 
 app.use(express.json());
 app.use('/user', user)
 app.use('/profile', profile)
 
 
-// User.belongsTo(Profile, { foreignKey: 'userId', as: 'profiles' })
-// Profile.hasOne(User, { foreignKey: 'userId', as: 'users' })
+if(cluster.isMaster){
+    console.log(`Worker is running ${process.pid}`);
+   
+    for (let i = 0; i <=cpus; i++){
+        cluster.fork(); 
+    }
 
-// User.hasOne(Profile, { foreignKey: 'userId', as: 'profiles' });
-// Profile.belongsTo(User, { foreignKey: 'userId', as: 'users' });
+    cluster.on('exit', (worker, signal)=>{
+        console.log(`Worker is ${worker.process.pid} is died`);
+        console.log('Server is restarting please wait..!');  
+        setTimeout(() => {
+            cluster.fork();
+        }, 2000);
+    })
+}
+else{
+    // Error Middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send({ error: 'Something went wrong..!' });
+});
 
-// User.sync({alter: true});
-// Profile.sync({alter: true});
+app.listen(PORT, () => {
+    console.log(`Server is running on PORT localhost:${PORT}`);
+});
 
-app.listen(PORT, ()=>{console.log(`Server is running on ${PORT}`)});
+}
+
+// app.listen(PORT, ()=>{console.log(`Server is running on ${PORT}`)});
