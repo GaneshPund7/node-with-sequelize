@@ -1,4 +1,4 @@
-const models = require('../../index')
+const models = require('../../utils/db/index')
 
 async function getProfileDetails(req, res){
     const getUsers = await models.User.findAll();

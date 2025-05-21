@@ -1,8 +1,9 @@
 
-const models = require('../../index')
-
+const models = require('../../utils/db/index')
+const { createtoken, verifyToken } = require('../../utils/middleware/checkPermission')
 async function userLogin(req, res, next) {
     const { name, password } = req.body;
+
     try {
         const verifyUser = await models.User.findOne({
             //  attributes:['name']
@@ -14,7 +15,10 @@ async function userLogin(req, res, next) {
         if (verifyUser.password !== password) {
             res.status(400).json({ message: "Password is wrong" });
         } 
-         return res.status(200).json({ message: "User Login successfuly" });
+        const token = await createtoken(name);
+        console.log("Your token ", token)
+        // const token = "g"
+         return res.status(200).json({ message: "User Login successfuly" , token : token} );
     
     } catch (error) {
         res.status(400).json({ message: "Somthing went wrong" });
