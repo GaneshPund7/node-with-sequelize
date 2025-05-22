@@ -11,9 +11,9 @@ const Profile = sequelize.define('Profile', {
         type: DataTypes.STRING,
         allowNull: false
     },
-    userId: {type: DataTypes.INTEGER},
+    UserId: {type: DataTypes.INTEGER},
 
-    commentId: {type: DataTypes.INTEGER},
+    CommentId: {type: DataTypes.INTEGER},
 },
     {
         tableName: 'profiles',
@@ -22,11 +22,12 @@ const Profile = sequelize.define('Profile', {
     
     
     Profile.associate = (models) =>{
-        Profile.belongsTo(models.User, { foreignKey: 'userId' , as: 'users' });      
+        Profile.belongsTo(models.User);
+        Profile.belongsTo(models.Comment );        
     }
+    module.exports = Profile;
 
-    Profile.sync({ alter: true});
-module.exports = Profile;
+    Profile.sync({ alter: true });
 // const sequelize = require('../../utils/db/db');
 // const { DataTypes } = require('sequelize');
 

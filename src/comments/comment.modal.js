@@ -7,9 +7,6 @@ const Comment = sequelize.define('Comment',{
         type: DataTypes.STRING,
         allowNull: true,
         unique: false
-    },
-    userId:{
-        type: DataTypes.STRING,
     }
 },{
 
@@ -17,15 +14,14 @@ const Comment = sequelize.define('Comment',{
     timestamps: false
 })
 
-//  module.exports = Comment
-Comment.sync({force: true })
+Comment.sync({alter: true })
 
 Comment.associate = (models)=>{
-    // Comment.belongsTo(models.User, { foreginKey: 'userId', as: 'users'});
+    Comment.belongsToMany(models.User, { through: models.Profile,  foreginKey: 'CommentId'});
 }
-// const user = require()
-   module.exports = Comment;
-
+ 
+module.exports = Comment;
+ 
 // const sequelize = require('../../utils/db/db');
 // const { DataTypes } = require('sequelize');
 

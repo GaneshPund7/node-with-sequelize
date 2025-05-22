@@ -23,34 +23,14 @@ const User = sequelize.define('User', {
     });
 
     User.associate = (models) =>{
-        User.hasOne(models.Profile, { as: 'profiles', foreignKey: 'userId' });
-        // User.hasMany(models.Employee, { as: 'employees', foreignKey: 'userId' });
-        // User.hasOne(models.Product, { as: 'roles', foreignKey: 'userId' });
-        User.belongsTo(models.Roles,{ foreignKey: 'roleId', as :'roles'})
+        // User.hasOne(models.Profile, { as: 'profiles', foreignKey: 'UserId' });
+        User.belongsTo(models.Role, { foreignKey: 'roleId'})
+        User.belongsToMany(models.Comment, { 
+            through: models.Profile, 
+            foreignKey: 'UserId', 
+            otherKey: 'commentId',
+            as: 'comments'
+        })
     }
-    
     module.exports = User;
-// const sequelize = require('../../utils/db/db');
-// const { DataTypes } = require('sequelize');
-
-// const User = sequelize.define('User', {
-//     name: {
-//         type: DataTypes.STRING,
-//         allowNull: false,
-//     },
-//     password: {
-//         type: DataTypes.STRING,
-//         allowNull: false,
-//     },
-// }, {
-//     tableName: 'users',
-//     timestamps: false,
-// });
-
-// User.associate = (models) => {
-//     User.hasOne(models.Profile, { as: 'profile', foreignKey: 'userId' });
-//     User.hasMany(models.Comment, { as: 'comments', foreignKey: 'userId' });
-// };
-// // User.sync({alter: true});
-
-// module.exports = User;
+ User.sync({ alter: true}); 

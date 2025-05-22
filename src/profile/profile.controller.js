@@ -7,9 +7,20 @@ async function getProfileDetails(req, res){
 }
 async function postProfileDetails(req, res){
     const { bio, address } = req.body;
-    const addUser = await models.Profile.create({bio, address});
 
-    res.json({message:" Profile added successfuly", data: addUser});
+    //     const getCommentId = await models.Comment.findOne({
+    //     where: { id : cmtID }
+    // });
+    //        const getUserId = await models.User.findOne({
+    //     where: { id : userId }
+    // });
+  
+const UserId = 1;
+const CommentId = 1;
+    // const commentId = getCommentId.id;
+    await models.Profile.create({ bio, address, UserId, CommentId});
+    res.json({ message: "User Added successfuly",  data: addUser });
+ 
 
 }
 
