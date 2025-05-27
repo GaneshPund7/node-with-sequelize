@@ -3,17 +3,21 @@ const user = require('./src/user/user.route');
 const profile = require('./src/profile/profile.route');
 const comment = require('./src/comments/comment.route');
 const role = require('./src/role/role.route');
+const permission = require('./src/permission/permission.route');
+const products = require('./src/products/product.route');
 // const User = require('./src/modal/user.modal')
 // const Profile = require('./src/modal/profile.modal')
 const app = express();
 const PORT = 3000;
-// const cpus = os.cpus().length;
 
 app.use(express.json());
 app.use('/user', user)
 app.use('/profile', profile)
 app.use('/comment', comment)
 app.use('/role', role)
+app.use('/product', products)
+app.use('/permission', permission)
+
 
 
 // if(cluster.isMaster){

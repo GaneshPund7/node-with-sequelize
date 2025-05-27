@@ -1,25 +1,85 @@
-const models = require('../../utils/db/index');
+const models = require("../../utils/db");
 
-async function checkpermission (req, res , next){
-try{
-const userId = req.userId;
+// async function checkAuths(req, res, next) {
 
-if( !userId){
-     return " Your unotherized"
-}
+//   const id = req.UserId;
+//   try {
+//     if (!id) {
+//       return res.status(401).send("Unauthorized");
+//     }
 
-const user = await models.User.findOne({
-    where: {id: userId},
-    include:{
-        model : models.Roles, as: 'roles'
+//     const user = await models.User.findOne({
+//       where: { id },
+//       include: {
+//         model: models.Permission,
+//         as: 'permission'
+//       }
+//     });
+
+//     if (!user) {
+//       return res.status(404).send("User not found");
+//     }
+
+//     const permission = await models.Permission.findOne({
+//       where: { RoleId: user.RoleId }
+//     });
+
+//     if (permission) {
+//       return next();
+//     } else {
+     
+//       return res.status(403).send("You don't have permission for this service");
+//     }
+
+//   } catch (error) {
+//     console.error(error);
+//     return res.status(500).send("Something went wrong");
+//   }
+// }
+
+// module.exports = {checkAuths};
+
+
+// const models = require("../../utils/db");
+
+async function checkAuths(req, res, next) {
+
+  const id = req.UserId;
+  try {
+    if (!id) {
+      return res.status(401).send("Unauthorized");
     }
-})
-if(user.roleId === 1){
-    next()
+
+    // Find the user
+    const user = await models.User.findOne({
+      where: { id },
+      include: {
+        model: models.Role,
+        as: 'role'
+      }
+    });
+
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+
+    // Check if a permission exists for the user's role
+    const permission = await models.Permission.findOne({
+      where: { RoleId: user.RoleId }
+    });
+
+    if (permission) {
+ 
+      return next();
+    } else {
+      // No permission for this role
+      return res.status(403).send("You don't have permission for this service");
+    }
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send("Something went wrong");
+  }
 }
-res.send("You dont have permission to access this..!")
-}catch(error){
-    res.status(400).json({message: "somthing went wrong...", error: error})
-}
-}
-module.exports = { checkpermission };
+
+module.exports = { checkAuths };

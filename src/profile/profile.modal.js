@@ -22,34 +22,9 @@ const Profile = sequelize.define('Profile', {
     
     
     Profile.associate = (models) =>{
-        Profile.belongsTo(models.User);
-        Profile.belongsTo(models.Comment );        
+        Profile.belongsTo(models.User , {as: 'profiles'});
+        Profile.belongsTo(models.Comment, { as : 'comments'} );        
     }
     module.exports = Profile;
 
     Profile.sync({ alter: true });
-// const sequelize = require('../../utils/db/db');
-// const { DataTypes } = require('sequelize');
-
-// const Profile = sequelize.define('Profile', {
-//   bio: {
-//     type: DataTypes.STRING,
-//     allowNull: false,
-//   },
-//   address: {
-//     type: DataTypes.STRING,
-//     allowNull: false,
-//   },
-//   userId: {
-//     type: DataTypes.INTEGER,
-//   },
-// }, {
-//   tableName: 'profiles',
-//   timestamps: false,
-// });
-
-// Profile.associate = (models) => {
-//   Profile.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
-// };
-
-// module.exports = Profile;

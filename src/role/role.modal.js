@@ -20,9 +20,9 @@ const Role = sequelize.define('Role', {
 });
 
 Role.associate = (models) =>{
-    // Role.hasOne(models.User, { foreignKey: 'roleId', as :'users'})
-    Role.hasOne(models.User, { foreignKey: 'roleId' });
-    // Roles.hasOne(models.Product, { foreignKey: 'roleId', as : 'products'})
+    // Role.hasOne(models.User, { foreignKey: 'RoleId', as :'users'})
+    Role.hasOne(models.User, { foreignKey: 'RoleId', as: 'role' });
+    // Roles.hasOne(models.Product, { foreignKey: 'RoleId', as : 'products'})
 }
 module.exports = Role
     Role.sync({ alter: true });

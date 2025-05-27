@@ -25,4 +25,4 @@ Product.associate = (models)=>{
     // Product.belongsTo(models.Role, {through: models.role, as: 'roles'})
 }
 
-Product.sync({ force: true})
+Product.sync({ alter: true})

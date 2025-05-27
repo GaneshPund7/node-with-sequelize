@@ -3,7 +3,7 @@ const models = require('../../utils/db/index')
 async function getRole(req, res) {
     try {
         const getRole =await models.Roles.findAll({
-            where: {roleId: 1}
+            where: {RoleId: 1}
         });
         res.status(200).json({ message: "Role fetched", Data: getRole })
     } catch (error) {

@@ -17,8 +17,9 @@ const Comment = sequelize.define('Comment',{
 Comment.sync({alter: true })
 
 Comment.associate = (models)=>{
-    Comment.belongsToMany(models.User, { through: models.Profile,  foreginKey: 'CommentId'});
+    Comment.belongsToMany(models.User, { through: models.Profile,  foreginKey: 'CommentId', as: "comments"});
 }
+ 
  
 module.exports = Comment;
  

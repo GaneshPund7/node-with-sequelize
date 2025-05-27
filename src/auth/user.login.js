@@ -1,12 +1,11 @@
 
-const models = require('../../utils/db/index')
-const { createtoken, verifyToken } = require('../../utils/middleware/checkPermission')
+const models = require('../../utils/db/index');
+const jwt = require('jsonwebtoken');
+const { createToken } = require('../../utils/middleware/checkPermission');
 async function userLogin(req, res, next) {
     const { name, password } = req.body;
-
     try {
         const verifyUser = await models.User.findOne({
-            //  attributes:['name']
             where: { name }
         })
         if (!verifyUser) {
@@ -14,16 +13,16 @@ async function userLogin(req, res, next) {
         }
         if (verifyUser.password !== password) {
             res.status(400).json({ message: "Password is wrong" });
-        } 
-        const token = await createtoken(name);
-        console.log("Your token ", token)
-        // const token = "g"
-         return res.status(200).json({ message: "User Login successfuly" , token : token} );
+        }        
+        const id = verifyUser.id;
+        const payload = { id, name, password }
+       const token = await createToken(payload);
+         return res.status(200).json({ message: "User Login successfuly", token: token} );
     
     } catch (error) {
-        res.status(400).json({ message: "Somthing went wrong" });
+        res.status(400).json({ message: "Somthing went wrong", error: error });
     }
 }
 
 
-module.exports = { userLogin }
+module.exports = { userLogin };

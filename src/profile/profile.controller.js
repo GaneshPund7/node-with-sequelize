@@ -1,10 +1,30 @@
 const models = require('../../utils/db/index')
 
-async function getProfileDetails(req, res){
-    const getUsers = await models.User.findAll();
-    res.send(getUsers);
 
+
+async function getProfileDetails(req, res){
+
+    const from = parseInt(req.query.from) || 0;
+const to = parseInt(req.query.to) || 10;
+
+const limit = to - from + 1;
+const offset = from;
+    const getProfile = await models.Profile.findAll({
+    limit,
+    offset
+
+    })
+     const totalRecords = await models.Profile.count();
+
+    const pageCount = Math.ceil( totalRecords / limit);
+
+    res.status(200).json({ message: "profile details found", data: getProfile, counts: pageCount})
 }
+
+
+
+
+
 async function postProfileDetails(req, res){
     const { bio, address } = req.body;
 

@@ -1,6 +1,5 @@
 const sequelize = require('../../utils/db/db');
 const { DataTypes } = require('sequelize');
-const models = require('../../utils/db/index')
 // const Profile = require('./profile.modal')
 const User = sequelize.define('User', {
     name: {
@@ -12,7 +11,7 @@ const User = sequelize.define('User', {
         type: DataTypes.STRING,
         allowNull: false
     },
-     roleId: {
+     RoleId: {
         type: DataTypes.INTEGER,
         // allowNull: false
     }
@@ -23,14 +22,13 @@ const User = sequelize.define('User', {
     });
 
     User.associate = (models) =>{
-        // User.hasOne(models.Profile, { as: 'profiles', foreignKey: 'UserId' });
-        User.belongsTo(models.Role, { foreignKey: 'roleId'})
-        User.belongsToMany(models.Comment, { 
-            through: models.Profile, 
-            foreignKey: 'UserId', 
-            otherKey: 'commentId',
-            as: 'comments'
+        // User.hasOne(models.Profile, {foreignKey: 'UserId',  })
+        User.belongsTo(models.Role, { foreignKey: 'RoleId', as: 'role'})
+        User.belongsToMany(models.Comment, {  through: models.Profile, foreignKey: 'UserId', 
+            otherKey: 'commentId', as: 'comments'
         })
+        User.belongsToMany(models.Role, { through: models.Permission, foreignkey: 'UserId' })
     }
+    
     module.exports = User;
- User.sync({ alter: true}); 
+ User.sync({ alter: true }); 
